@@ -21,7 +21,13 @@ def pregunta_01():
     214
 
     """
-    return
+    Suma_col_dos = 0
+    
+    with open('data.csv', 'r') as f:        
+        for fila in f:
+            fila = fila.split('\t')
+            Suma_col_dos = Suma_col_dos + float(fila[1])
+    return Suma_col_dos
 
 
 def pregunta_02():
@@ -39,7 +45,13 @@ def pregunta_02():
     ]
 
     """
-    return
+    
+    with open('data.csv','r') as f:
+        f = [lista.replace('\n','') for lista in f]
+        f = [sep.split('\t') for sep in f]
+        fila = [x[0][0] for x in f]
+        resultado =[(letra,fila.count(letra)) for letra in sorted(set(fila))]    
+    return resultado
 
 
 def pregunta_03():
@@ -57,7 +69,17 @@ def pregunta_03():
     ]
 
     """
-    return
+    with open('data.csv','r') as f:
+        data = f.readlines()
+        data = [fila.replace("\n", "") for fila in data]
+        data = [fila.replace("\t", ",") for fila in data]
+        data = [fila.split(",") for fila in data]
+        data = [fila[0:2] for fila in data]
+        data = [(fila[0], int(fila[1])) for fila in data] 
+        respuesta =[(k, sum([y for (x,y) in data if x == k])) for k in dict(data).keys()]
+        respuesta.sort(reverse = False)   
+    
+    return respuesta
 
 
 def pregunta_04():
@@ -82,7 +104,13 @@ def pregunta_04():
     ]
 
     """
-    return
+    with open('data.csv','r') as f:
+        f = [x.replace("\n", "") for x in f ]
+        f = [y.split("\t") for y in f ]             
+        fecha_mes = [t[2].split("-")[1] for t in f]
+        result = [(mes, fecha_mes.count(mes)) for mes in sorted(set(fecha_mes))]
+    
+    return result
 
 
 def pregunta_05():
@@ -100,7 +128,16 @@ def pregunta_05():
     ]
 
     """
-    return
+    with open('data.csv','r') as f:
+        f = [row.replace("\n", "") for row in f]
+        f = [row.replace("\t", ",") for row in f]
+        f = [row.split(",") for row in f]
+        f = [row[0:2] for row in f]
+        f = [(row[0], int(row[1])) for row in f] 
+        respuesta =[(k, max([y for (x,y) in f if x == k]), min([y for (x,y) in f if x == k])) for k in dict(f).keys()]
+        respuesta.sort(reverse = False)    
+    
+    return respuesta
 
 
 def pregunta_06():
@@ -125,7 +162,30 @@ def pregunta_06():
     ]
 
     """
-    return
+    with open( 'data.csv' , 'r') as f:
+            
+        f = [row.replace("\n", "") for row in f]
+        f = [row.replace("\t", ",") for row in f]
+        f = [row.split(",") for row in f]
+        f = [row[3:] for row in f]
+        
+        columna = []
+        for i, element in enumerate (f):
+            lista = []
+            for i, fila in enumerate (element):
+                if len(fila) > 1:
+                    lista.append(fila)
+            columna.append(lista)
+        
+        lista = []
+        for i, element in enumerate (columna):
+            lista.extend(element)
+        
+        lista = [(row[:3], int(row[4:])) for row in lista]
+        respuesta =[(k, min([y for (x,y) in lista if x == k]), max([y for (x,y) in lista if x == k])) for k in dict(lista).keys()]
+        respuesta.sort(reverse = False) 
+    
+    return respuesta
 
 
 def pregunta_07():
@@ -149,7 +209,24 @@ def pregunta_07():
     ]
 
     """
-    return
+    with open( 'data.csv' , 'r') as f:
+        f = [row.replace("\n", "") for row in f]
+        f = [row.replace("\t", ",") for row in f]
+        f = [row.split(",") for row in f]
+        f = [row[0:2] for row in f]
+        f = [(int(row[1]), row[0]) for row in f] 
+        
+        counter = {}
+        for key, value in f:
+            if key in counter:       
+                counter[key] += [value]
+            else:
+                counter[key] = [value]
+        
+        respuesta = [(key, counter[key]) for key in counter]
+        respuesta.sort(reverse = False)
+        
+    return respuesta
 
 
 def pregunta_08():
@@ -174,7 +251,21 @@ def pregunta_08():
     ]
 
     """
-    return
+    with open( 'data.csv' , 'r') as f:
+                     
+        f = [fila.replace("\n", "") for fila in f ]
+        f = [fila.split("\t") for fila in f ]
+        
+        lista = [(int(t[1]), t[0]) for t in f]
+        resultado=[]
+        for numero in sorted(set(t[0] for t in lista)):
+
+            letters = sorted(set([t[1] for t in lista if t[0] == numero]))
+            resultado.append((numero, letters))
+            
+        resultado = sorted(resultado, key=lambda x: x[0])
+        
+    return resultado
 
 
 def pregunta_09():
@@ -197,7 +288,41 @@ def pregunta_09():
     }
 
     """
-    return
+    with open( 'data.csv' , 'r') as f:
+                
+        f = [row.replace("\n", "") for row in f]
+        f = [row.replace("\t", ",") for row in f]
+        f = [row.split(",") for row in f]
+        f = [row[3:] for row in f]
+        
+        new_data = []
+        for i, element in enumerate (f):
+            lista = []
+            for i, fila in enumerate (element):
+                if len(fila) > 1:
+                    lista.append(fila)
+            new_data.append(lista)
+                    
+        lista = []
+        for i, element in enumerate (new_data):
+            lista.extend(element)
+        
+        lista = [row.replace(":", ",") for row in lista]    
+        lista = [row.split(',') for row in lista]  
+        lista = [(row[0], (int(row[1]))) for row in lista] 
+
+        counter = {}
+        for key, value in lista:
+            if key in counter:       
+                counter[key] += 1
+            else:
+                counter[key] = 1
+
+        respuesta = list(counter.items())
+        respuesta.sort(reverse = False)
+        respuesta = dict (respuesta)
+    
+    return respuesta
 
 
 def pregunta_10():
@@ -218,7 +343,36 @@ def pregunta_10():
 
 
     """
-    return
+    with open( 'data.csv' , 'r') as f:
+                
+        f = [row.replace("\n", "") for row in f]
+        f = [row.replace("\t", ",") for row in f]
+        f = [row.split(",") for row in f]
+        columna1 = [row[0] for row in f]  
+        f = [row[3:] for row in f]
+        
+        columna4 = []
+        columna5 = []
+        for index, element in enumerate (f):
+            lista4 = []
+            lista5 = []
+            for indice, fila in enumerate (element):
+                if len(fila) > 1:
+                    lista5.append(fila)
+                if len(fila) == 1:
+                    lista4.append(fila)
+            columna4.append(lista4)
+            columna5.append(lista5)
+        
+        columna4 = [len(row) for row in columna4]  
+        columna5 = [len(row) for row in columna5]  
+        
+        respuesta =[]
+        for index, element in enumerate (columna1):
+            respuesta.append((str(element), columna4[index], columna5[index]))
+        
+    
+    return respuesta
 
 
 def pregunta_11():
@@ -236,11 +390,40 @@ def pregunta_11():
         "f": 134,
         "g": 35,
     }
-
-
     """
-    return
-
+    with open( 'data.csv' , "r") as f:
+           
+        f = [row.replace("\n", "") for row in f]
+        f = [row.replace("\t", ",") for row in f]
+        f = [row.split(",") for row in f]
+        columna2 = [row[1] for row in f]  
+        f = [row[3:] for row in f]
+        
+        columna4 = []
+        for index, element in enumerate (f):
+            lista4 = []
+            for indice, fila in enumerate (element):
+                if len(fila) == 1:
+                    lista4.append(fila)
+            columna4.append(lista4)
+        
+        lista = []
+        for index, element in enumerate (columna4):
+            lista.extend(element)
+        
+        clave = set(lista)
+        clave = sorted(clave)
+        
+        respuesta = {}
+        for ind_clave, elem_clave in enumerate (clave): 
+            for ind_c4, elem_c4 in enumerate(columna4):
+                if elem_clave in elem_c4:
+                    if elem_clave in respuesta:
+                        respuesta[elem_clave] += int(columna2[ind_c4])
+                    else: 
+                        respuesta[elem_clave] = int(columna2[ind_c4])
+    
+    return respuesta
 
 def pregunta_12():
     """
@@ -257,4 +440,38 @@ def pregunta_12():
     }
 
     """
-    return
+    with open( 'data.csv' , "r") as f:
+        
+        f = [row.replace("\n", "") for row in f]
+        f = [row.replace("\t", ",") for row in f]
+        f = [row.split(",") for row in f]
+        columna1= [row[0] for row in f]  
+        f = [row[3:] for row in f]
+        
+        columna5 = []
+        for index, element in enumerate (f):
+            lista5 = []
+            for indice, fila in enumerate (element):
+                if len(fila) > 1:
+                    lista5.append(fila)
+            columna5.append(lista5)        
+               
+        count_column5 = [[int(e[4:]) for e in row] for row in columna5]
+        count_column5 = [sum(row) for row in count_column5] 
+        
+        lista =[]
+        for index, element in enumerate (columna1):
+            lista.append((str(element), count_column5[index]))
+                    
+        respuesta = {}
+        for key, value in lista:
+            if key in respuesta:       
+                respuesta[key] += value
+            else:
+                respuesta[key] = value        
+            
+        respuesta = list(respuesta.items())
+        respuesta.sort(reverse = False)
+        respuesta = dict (respuesta)
+        
+    return respuesta
